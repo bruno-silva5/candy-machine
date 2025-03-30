@@ -5,73 +5,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
+    <script src="./script.js" defer></script>
     <title>Candy Machine</title>
 </head>
 
 <body>
+    <div class="candy-prices">
+        <div class="candy-price">
+            <img src="imgs/candies/candy.png" alt="candy">
+            <span>R$ 6,00</span>
+        </div>
+        <div class="candy-price">
+            <img src="imgs/candies/chocolate-bar.png" alt="chocolate-bar">
+            <span>R$ 7,00</span>
+        </div>
+        <div class="candy-price">
+            <img src="imgs/candies/lollipop.png" alt="lollipop">
+            <span>R$ 8,00</span>
+        </div>
+    </div>
     <div class="machine-wrapper">
         <div>
             <div class="main-window">
                 <div class="shelf">
                     <div class="candy">
-                        <img src="imgs/candy.png" alt="candy">
-                        <img src="imgs/candy.png" alt="candy">
-                        <img src="imgs/candy.png" alt="candy">
-                        <img src="imgs/candy.png" alt="candy">
+                        <img src="imgs/candies/candy.png" alt="candy">
+                        <img src="imgs/candies/candy.png" alt="candy">
+                        <img src="imgs/candies/candy.png" alt="candy">
+                        <img src="imgs/candies/candy.png" alt="candy">
                     </div>
                     <div class="shelf-name">Doce A</div>
                 </div>
                 <div class="shelf">
                     <div class="candy">
-                        <img src="imgs/chocolate-bar.png" alt="chocolate-bar">
-                        <img src="imgs/chocolate-bar.png" alt="chocolate-bar">
-                        <img src="imgs/chocolate-bar.png" alt="chocolate-bar">
-                        <img src="imgs/chocolate-bar.png" alt="chocolate-bar">
+                        <img src="imgs/candies/chocolate-bar.png" alt="chocolate-bar">
+                        <img src="imgs/candies/chocolate-bar.png" alt="chocolate-bar">
+                        <img src="imgs/candies/chocolate-bar.png" alt="chocolate-bar">
+                        <img src="imgs/candies/chocolate-bar.png" alt="chocolate-bar">
                     </div>
                     <div class="shelf-name">Doce B</div>
                 </div>
                 <div class="shelf">
                     <div class="candy">
-                        <img src="imgs/lollipop.png" alt="candy">
-                        <img src="imgs/lollipop.png" alt="candy">
-                        <img src="imgs/lollipop.png" alt="candy">
-                        <img src="imgs/lollipop.png" alt="candy">
+                        <img src="imgs/candies/lollipop.png" alt="candy">
+                        <img src="imgs/candies/lollipop.png" alt="candy">
+                        <img src="imgs/candies/lollipop.png" alt="candy">
+                        <img src="imgs/candies/lollipop.png" alt="candy">
                     </div>
                     <div class="shelf-name">Doce C</div>
                 </div>
             </div>
-            <div class="output-window"></div>
+            <div class="output-window" id="output-window" onclick="closeDoor(event)">
+                <div class="output-door" id="output-door">
+                    <div class="output-door-handle"></div>
+                </div>
+                <!-- <img width="45" src="imgs/candies/lollipop.png" alt="candy"> -->
+            </div>
         </div>
         <div>
             <div class="option-btns">
                 <div>
-                    <button class="button-19" role="button">
+                    <button class="button-19" id="candy-a-btn" role="button" onclick="selectCandy('a')" disabled="true">
                         Doce A
                     </button>
-                    <div class="candy-availability"></div>
+                    <div class="candy-availability" id="candy-a-availability"></div>
                 </div>
                 <div>
-                    <button class="button-19" role="button">
+                    <button class="button-19" id="candy-b-btn" role="button" onclick="selectCandy('b')" disabled="true">
                         Doce B
                     </button>
-                    <div class="candy-availability"></div>
+                    <div class="candy-availability" id="candy-b-availability"></div>
                 </div>
                 <div>
-                    <button class="button-19" role="button">
+                    <button class="button-19" id="candy-c-btn" role="button" onclick="selectCandy('c')" disabled="true">
                         Doce C
                     </button>
-                    <div class="candy-availability"></div>
+                    <div class="candy-availability" id="candy-c-availability"></div>
                 </div>
             </div>
             <div class="money-input">
-                <div class="amount-display">
-                    Insira o dinheiro
-                </div>
+                <div id="amount-display" class="amount-display">Insira o dinheiro</div>
                 <div class="money-insert">
                     <div class="hole"></div>
+                    <div class="drop-area" ondrop="drop(event)" ondragover="dragOver(event)"></div>
+                </div>
+            </div>
+            <div class="money-exchange-wrapper">
+                Troco
+                <div class="money-exchange">
+                    <div class="hole" id="money-exchange-hole"></div>
+                    <div class="exchange-area" id="exchange-area"></div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="banknote-and-coins">
+        <img src="imgs/money/1_real.png" id="1_real" width="150" alt="Nota de 1 real" draggable="true"
+            ondragstart="dragStart(event)" data-value="1">
+        <img src="imgs/money/2_reais.png" id="2_reais" width="150" alt="Nota de 2 reais" draggable="true"
+            ondragstart="dragStart(event)" data-value="2">
+        <img src="imgs/money/5_reais.png" id="5_reais" width="150" alt="Nota de 5 real" draggable="true"
+            ondragstart="dragStart(event)" data-value="5">
+        <!-- <img src="imgs/coin.png" alt="coin">
+        <img src="imgs/coin.png" alt="coin">
+        <img src="imgs/coin.png" alt="coin"> -->
     </div>
 </body>
 

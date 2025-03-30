@@ -10,6 +10,38 @@ body {
     background-color: #51B6FB;
 }
 
+.candy-prices {
+    left: 0;
+    top: 0;
+    width: 280px;
+    height: 270px;
+    position: absolute;
+    justify-content: space-between;
+    background-image: url('./imgs/wooden_board.png');
+    background-size: cover;
+    background-position: top;
+}
+
+.candy-prices > div:first-child {
+    margin-top: 115px;
+}
+
+.candy-prices > div {
+    display: flex;
+    align-items: center;
+    font-weight: 900;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.3em;
+    margin-left: 3.6em;
+    margin-bottom: .3em;
+    color: #000;
+}
+
+.candy-prices img {
+    width: 34px;
+    margin-right: 1em;
+}
+
 .machine-wrapper {
     display: flex;
     width: 560px;
@@ -49,6 +81,30 @@ body {
     margin-top: 1.3em;
     border-radius: 14px;
     border: 3px solid #333;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    padding-top: .6em;
+}
+
+.output-door {
+    border: 1px solid #333;
+    background-color: rgb(193, 189, 189);
+    width: 100%;
+    height: 100%;
+    padding-top: 3.5em;
+    position: absolute;
+    transition: 1s;
+    top: 0;
+}
+
+.output-door-handle {
+    background-color: #605f5f;
+    border: 1px solid #333;
+    width: 65px;
+    height: 4px;
+    border-radius: 5px;
+    margin: 0 auto;
 }
 
 .option-btns {
@@ -69,12 +125,13 @@ body {
 .candy-availability {
     width: 18px;
     height: 18px;
-    background-color: grey;
+    background-color: #808080;
     border: 1px solid #333;
     border-radius: 50%;
     position: absolute;
     right: -32px;
     top: 50%;
+    transition: all 0.3s ease-in-out;
     transform: translate(0, -50%);
 }
 
@@ -105,12 +162,14 @@ body {
 }
 
 .amount-display {
+    width: 114px;
     font-size: .9em;
     font-family: monospace;
     font-weight: bolder;
     color: #fff;
     display: flex;
     align-items: center;
+    justify-content: center;
     text-align: center;
     background-color: #753739;
     height: 45%;
@@ -127,7 +186,13 @@ body {
     border-radius: 50%;
 }
 
+.money-insert .drop-area {
+    position: relative;
+    width: 130%;
+}
+
 .hole {
+    /* overflow: hidden; */
     position: relative;
     height: 5px;
     width: 85%;
@@ -202,4 +267,71 @@ body {
 .button-19:active {
     border-width: 4px 0 0;
     background: none;
+}
+
+.banknote-and-coins {
+    position: relative;
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    padding: 0 2em;
+    height: 100%;
+    background: #2fa7f6;
+    border-left: 3px solid #333;
+}
+
+.banknote-and-coins img:nth-child(1) {
+    top: 20px;
+}
+.banknote-and-coins img:nth-child(2) {
+    top: 150px;
+}
+
+.banknote-and-coins img:nth-child(3) {
+    top: 280px;
+}
+
+.banknote-and-coins img {
+    position: absolute;
+    transition: all 0.3s ease-in-out;
+}
+
+.banknote-and-coins img:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.drop-area {
+    margin-top: 10px;
+    overflow: hidden;
+    position: relative;
+    height: 130px;
+    /* background-color: rgba(255, 192, 203, 0.168); */
+    padding-left: 8px;
+}
+
+.money-exchange-wrapper {
+    margin-top: 4em;
+    font-family: din-round, sans-serif;
+    color: #fff;
+    font-size: .9em;
+    font-weight: 600;
+    letter-spacing: .8px;
+    text-align: center;
+}
+
+.money-exchange {
+    background-color: #6A696E;
+    border: 2px solid #333;
+    height: 34px;
+    margin-top: .3em;
+}
+
+.exchange-area {
+    position: relative;
+    height: 70px;
+    overflow: hidden;
+    margin-top: .5em;
 }
