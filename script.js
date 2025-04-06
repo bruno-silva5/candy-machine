@@ -1,4 +1,5 @@
 var currentAmount = 0;
+var readingMoney = false;
 
 const candyPrices = {
     "a": 6,
@@ -32,6 +33,9 @@ function isDoorOpen() {
 }
 
 function selectCandy(candyOption) {
+    if (readingMoney) {
+        return;
+    }
     const audio = new Audio('audios/select_candy.mp3');
     audio.play();
     audio.volume = 0.3;
@@ -180,6 +184,7 @@ function drop(event) {
         return;
     }
     setTextInDisplay('Verificando...');
+    readingMoney = true;
     const audio = new Audio('audios/inserting_money.mp3');
     audio.play();
     audio.volume = 0.3;
@@ -218,6 +223,7 @@ function drop(event) {
         if (currentAmount >= 8) {
             setCandyAvailable('c');
         }
+        readingMoney = false;
     }, 1000);
 
     const dropzone = event.target;
