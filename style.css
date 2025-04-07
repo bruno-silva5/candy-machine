@@ -188,7 +188,8 @@ body {
 
 .money-insert .drop-area {
     position: relative;
-    width: 130%;
+    width: 200%;
+    height: 160px;
 }
 
 .hole {

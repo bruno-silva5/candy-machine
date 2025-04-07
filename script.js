@@ -1,5 +1,8 @@
 var currentAmount = 0;
-var readingMoney = false;
+var isGivingExchange = false; // Nao pode permitir inserir mais dinheiro enquanto estiver dando o troco, pois eh necessario aguardar a maquina zerar o saldo e evitar que contabilize com o restante da divisao
+var isReadingMoney = false; // Eh preciso aguardar a leitura de dinheiro antes de permiir escolher o doce, pois se eh feito uma escolha antes de terminar a leitura, o troco sera calculado errado e o valor inserido sera zerado
+var readingMoneyId = null;
+var isSelectingCandy = false;
 
 const candyPrices = {
     "a": 6,
@@ -32,10 +35,14 @@ function isDoorOpen() {
     return outputDoor.dataset.isOpen === "true";
 }
 
-function selectCandy(candyOption) {
-    if (readingMoney) {
+const selectCandy = async (candyOption) => {
+    if (isReadingMoney || isSelectingCandy) {
         return;
     }
+    Object.keys(candyPrices).forEach(candyKey => {
+        setCandyUnavailable(candyKey);
+    })
+    isSelectingCandy = true;
     const audio = new Audio('audios/select_candy.mp3');
     audio.play();
     audio.volume = 0.3;
@@ -45,11 +52,6 @@ function selectCandy(candyOption) {
     currentAmount -= candyPrices[candyOption];
     updateAmountDisplay('Seu troco: ');
     giveExchange();
-    Object.keys(candyPrices).forEach(candyKey => {
-        if (currentAmount < candyPrices[candyKey]) {
-            setCandyUnavailable(candyKey);
-        }
-    })
 
     const outputDoor = document.getElementById(`output-door`);
     const outputWindow = document.getElementById(`output-window`);
@@ -62,9 +64,11 @@ function selectCandy(candyOption) {
     candyImg.alt = "candy";
     candyImg.style.transition = ".3s";
     outputWindow.appendChild(candyImg);
+    isSelectingCandy = false;
 }
 
 function giveExchange() {
+    isGivingExchange = true;
     let cincoReaisNotesQty = 0;
     let doisReaisNotesQty = 0;
     let umRealNotesQty = 0;
@@ -118,11 +122,12 @@ function giveExchange() {
         })
     }
 
+    currentAmount = 0;
     handleExchange(5, cincoReaisNotesQty)
         .then(() => handleExchange(2, doisReaisNotesQty))
         .then(() => handleExchange(1, umRealNotesQty))
         .then(() => {
-            currentAmount = 0;
+            isGivingExchange = false;
             updateAmountDisplay();
         })
 }
@@ -158,24 +163,22 @@ function setCandyUnavailable(candyOption) {
 }
 
 function setCandyAvailable(candyOption) {
-    setTimeout(() => {
-        const candyBtn = document.getElementById(`candy-${candyOption}-btn`);
-        if (!candyBtn.disabled) {
-            return;
-        }
-        const audio = new Audio('audios/candy_available.mp3');
-        audio.play();
-        audio.volume = 0.2;
-        audio.loop = false;
-        audio.currentTime = 0;
-        const candyAvailability = document.getElementById(`candy-${candyOption}-availability`);
-        candyAvailability.style.backgroundColor = "#00d600";
-        
-        candyBtn.disabled = false;
-    }, 200);
+    const candyBtn = document.getElementById(`candy-${candyOption}-btn`);
+    if (!candyBtn.disabled) {
+        return;
+    }
+    const audio = new Audio('audios/candy_available.mp3');
+    audio.play();
+    audio.volume = 0.2;
+    audio.loop = false;
+    audio.currentTime = 0;
+    const candyAvailability = document.getElementById(`candy-${candyOption}-availability`);
+    candyAvailability.style.backgroundColor = "#00d600";
+
+    candyBtn.disabled = false;
 }
 
-function drop(event) {
+const drop = async (event) => {
     if (isDoorOpen()) {
         setTextInDisplay('Favor, pegue o seu doce');
         setTimeout(() => {
@@ -183,8 +186,15 @@ function drop(event) {
         }, 2000);
         return;
     }
+    if (isGivingExchange) {
+        return;
+    }
+    if (isReadingMoney) {
+        return;
+    }
+    isReadingMoney = true;
+    readingMoneyId = Math.random().toString(36).substring(2, 8);
     setTextInDisplay('Verificando...');
-    readingMoney = true;
     const audio = new Audio('audios/inserting_money.mp3');
     audio.play();
     audio.volume = 0.3;
@@ -208,26 +218,34 @@ function drop(event) {
         draggedElement.style.zIndex = "1000";
     }, 400);
 
-    setTimeout(() => {
-        currentAmount += parseInt(data);
-        updateAmountDisplay();
-
-        if (currentAmount >= 6) {
-            setCandyAvailable('a');
-        }
-
-        if (currentAmount >= 7) {
-            setCandyAvailable('b');
-        }
-
-        if (currentAmount >= 8) {
-            setCandyAvailable('c');
-        }
-        readingMoney = false;
-    }, 1000);
-
     const dropzone = event.target;
     dropzone.appendChild(draggedElement);
+    await handleCandyAvailability(data, readingMoneyId);
+}
+
+const handleCandyAvailability = (data, currentReadingMoneyId) => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            currentAmount += parseInt(data);
+            updateAmountDisplay();
+
+            if (currentAmount >= 6) {
+                setCandyAvailable('a');
+            }
+
+            if (currentAmount >= 7) {
+                setCandyAvailable('b');
+            }
+
+            if (currentAmount >= 8) {
+                setCandyAvailable('c');
+            }
+            if (currentReadingMoneyId === readingMoneyId) {
+                isReadingMoney = false;
+            }
+            resolve();
+        }, 1000);
+    })
 }
 
 document.addEventListener("DOMContentLoaded", function () {
